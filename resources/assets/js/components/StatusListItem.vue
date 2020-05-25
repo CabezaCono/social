@@ -21,6 +21,13 @@
                 <span dusk="likes-count">{{ status.likes_count }}</span>
             </div>
 
+            <form @submit.prevent="addComment">
+                <textarea name="comment" v-model="newComment"></textarea>
+                <button dusk="comment-btn">Enviar</button>
+            </form>
+
+            <div v-for="comment in comments">{{ comment.body }}</div>
+
         </div>
     </div>
 </template>
@@ -35,26 +42,24 @@
             }
         },
 
-        methods: {
-            like(status) {
-                axios.post(`/statuses/${status.id}/likes`)
-                    .then(res => {
-                        status.is_liked = true;
-                        status.likes_count++;
-                    })
-            },
+        components: { LikeBtn },
 
-            unlike(status) {
-                axios.delete(`/statuses/${status.id}/likes`)
-                    .then(res => {
-                        status.is_liked = false;
-                        status.likes_count--;
-                    })
+        data() {
+            return {
+                newComment: '',
+                comments: []
             }
-
         },
 
-        components: { LikeBtn }
+        methods: {
+            addComment() {
+                axios.post(`/statuses/${this.status.id}/comments`, {body: this.newComment})
+                    .then(res => {
+                        this.newComment = '';
+                        this.comments.push(res.data.data)
+                    });
+            }
+        }
     }
 </script>
 
