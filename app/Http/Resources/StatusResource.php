@@ -21,7 +21,8 @@ class StatusResource extends JsonResource
             'user_avatar' => 'https://semantic-ui.com/images/wireframe/image.png',
             'ago' => $this->created_at->diffForHumans(),
             'is_liked' => $this->isLiked(),
-            'likes_count' => $this->likesCount()
+            'likes_count' => $this->likesCount(),
+            'comments' => CommentResource::collection($this->comments)
         ];
     }
 }
