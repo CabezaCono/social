@@ -43,6 +43,7 @@
                                   class="form-control border-0 shadow-sm"
                                   name="comment"
                                   placeholder="Escribe un comentario ..."
+                                  required
                                   rows="1"
                         ></textarea>
                         <div class="input-group-append">
@@ -81,7 +82,10 @@
                     .then(res => {
                         this.newComment = '';
                         this.comments.push(res.data.data)
-                    });
+                    })
+                    .catch(err => {
+                    console.log(err.response.data);
+                });
             }
         }
     }
