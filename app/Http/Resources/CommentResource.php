@@ -18,7 +18,8 @@ class CommentResource extends JsonResource
             'id' => $this->id,
             'body' => $this->body,
             'user_name' => $this->user->name,
-            'user_avatar' => 'https://semantic-ui.com/images/wireframe/image.png',
+            'user_avatar' => $this->user->avatar(),
+            'user_link' => $this->user->link(),
             'likes_count' => $this->likesCount(),
             'is_liked' => $this->isLiked()
         ];
