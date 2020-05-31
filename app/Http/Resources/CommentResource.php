@@ -15,9 +15,12 @@ class CommentResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'body' => $this->body,
             'user_name' => $this->user->name,
-            'user_avatar' => 'https://semantic-ui.com/images/wireframe/image.png'
+            'user_avatar' => 'https://semantic-ui.com/images/wireframe/image.png',
+            'likes_count' => $this->likesCount(),
+            'is_liked' => $this->isLiked()
         ];
     }
 }

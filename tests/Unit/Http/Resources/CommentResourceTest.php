@@ -19,8 +19,11 @@ class CommentResourceTest extends TestCase
 
         $commentresource = CommentResource::make($comment)->resolve();
 
+        $this->assertEquals($comment->id, $commentresource['id']);
         $this->assertEquals($comment->body, $commentresource['body']);
         $this->assertEquals($comment->user->name, $commentresource['user_name']);
         $this->assertEquals('https://semantic-ui.com/images/wireframe/image.png', $commentresource['user_avatar']);
+        $this->assertEquals(0, $commentresource['likes_count']);
+        $this->assertEquals(false, $commentresource['is_liked']);
     }
 }
