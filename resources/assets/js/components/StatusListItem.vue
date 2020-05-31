@@ -13,7 +13,9 @@
         <div class="card-footer p-2 d-flex justify-content-between align-items-center">
 
             <like-btn
-                :status="status"
+                dusk="like-btn"
+                :url="`/statuses/${status.id}/likes`"
+                :model="status"
             ></like-btn>
 
             <div class="mr-2 text-secondary">
@@ -32,17 +34,11 @@
                     </div>
                 </div>
                 <span dusk="comment-likes-count">{{ comment.likes_count }}</span>
-                <button
-                    v-if="comment.is_liked"
-                    dusk="comment-unlike-btn"
-                    @click="unLikeComment(comment)"
-                    class="btn btn-primary"
-                >TE GUSTA</button>
-                <button
-                    v-else dusk="comment-like-btn"
-                    @click="likeComment(comment)"
-                    class="btn btn-primary"
-                >ME GUSTA</button>
+                <like-btn
+                    dusk="comment-like-btn"
+                    :url="`/comments/${comment.id}/likes`"
+                    :model="comment"
+                ></like-btn>
             </div>
 
             <form @submit.prevent="addComment" v-if="isAuthenticated">
