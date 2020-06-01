@@ -51,7 +51,6 @@
             <form @submit.prevent="addComment" v-if="isAuthenticated">
                 <div class="d-flex align-items-center">
                     <img class="rounded shadow-sm mr-2" width="34px"
-                         @click="nose(currentUser.avatar)"
                          :src="currentUser.avatar"
                          :alt="currentUser.name">
                     <div class="input-group">
@@ -102,9 +101,6 @@
                     console.log(err.response.data);
                 });
             },
-            nose(p) {
-                console.log(p)
-            }
         }
     }
 </script>
