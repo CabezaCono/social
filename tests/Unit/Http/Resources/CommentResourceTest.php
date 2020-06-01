@@ -2,8 +2,10 @@
 
 namespace Tests\Unit\Http\Resources;
 
+use App\Http\Resources\UserResource;
 use App\Models\Comment;
 use App\Models\Status;
+use App\User;
 use Tests\TestCase;
 use App\Http\Resources\CommentResource;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -21,10 +23,9 @@ class CommentResourceTest extends TestCase
 
         $this->assertEquals($comment->id, $commentresource['id']);
         $this->assertEquals($comment->body, $commentresource['body']);
-        $this->assertEquals($comment->user->name, $commentresource['user_name']);
-        $this->assertEquals($comment->user->avatar(), $commentresource['user_avatar']);
-        $this->assertEquals($comment->user->link(), $commentresource['user_link']);
         $this->assertEquals(0, $commentresource['likes_count']);
         $this->assertEquals(false, $commentresource['is_liked']);
+        $this->assertInstanceOf(UserResource::class, $commentresource['user']);
+        $this->assertInstanceOf(User::class, $commentresource['user']->resource);
     }
 }

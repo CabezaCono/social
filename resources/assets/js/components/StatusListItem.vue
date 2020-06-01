@@ -2,9 +2,9 @@
     <div class="card mb-3 border-0 shadow-sm">
         <div class="card-body d-flex flex-column">
             <div class="d-flex align-items-center mb-3">
-                <img class="rounded mr-3 shadow-sm" :src="status.user_avatar" width="40px" alt="">
+                <img class="rounded mr-3 shadow-sm" :src="status.user.avatar" width="40px" :alt="status.user.name">
                 <div>
-                    <h5 class="mb-1"><a :href="status.user_link" v-text="status.user_name"></a></h5>
+                    <h5 class="mb-1"><a :href="status.user.link" v-text="status.user.name"></a></h5>
                     <div class="small text-muted" v-text="status.ago"></div>
                 </div>
             </div>
@@ -27,11 +27,11 @@
 
             <div v-for="comment in comments" class="mb-3">
                 <div class="d-flex">
-                    <img class="rounded shadow-sm mr-2" width="34px" height="34px" :src="comment.user_avatar" :alt="comment.user_name">
+                    <img class="rounded shadow-sm mr-2" width="34px" height="34px" :src="comment.user.avatar" :alt="comment.user.name">
                     <div class="flex-grow-1">
                         <div class="card border-0 shadow-sm">
                             <div class="card-body p-2 text-secondary">
-                                <a :href="comment.user_link"><strong>{{ comment.user_name }}</strong></a>
+                                <a :href="comment.user.link"><strong>{{ comment.user.name }}</strong></a>
                                 {{ comment.body }}
                             </div>
                         </div>
@@ -51,6 +51,7 @@
             <form @submit.prevent="addComment" v-if="isAuthenticated">
                 <div class="d-flex align-items-center">
                     <img class="rounded shadow-sm mr-2" width="34px"
+                         @click="nose(currentUser.avatar)"
                          :src="currentUser.avatar"
                          :alt="currentUser.name">
                     <div class="input-group">
@@ -101,28 +102,9 @@
                     console.log(err.response.data);
                 });
             },
-
-            likeComment(comment) {
-                axios.post(`/comments/${comment.id}/likes`)
-                    .then(res => {
-                        comment.likes_count ++;
-                        comment.is_liked = true;
-                    })
-                    .catch(err => {
-                        console.log(err.response.data);
-                    });
-            },
-
-            unLikeComment(comment) {
-                axios.delete(`/comments/${comment.id}/likes`)
-                    .then(res => {
-                        comment.likes_count --;
-                        comment.is_liked = false;
-                    })
-                    .catch(err => {
-                        console.log(err.response.data);
-                    });
-            },
+            nose(p) {
+                console.log(p)
+            }
         }
     }
 </script>
