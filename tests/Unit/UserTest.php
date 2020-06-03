@@ -34,5 +34,6 @@ class UserTest extends TestCase
         $user = factory(User::class)->make();
 
         $this->assertEquals('https://semantic-ui.com/images/wireframe/image.png', $user->avatar());
+        $this->assertEquals('https://semantic-ui.com/images/wireframe/image.png', $user->avatar);
     }
 }
