@@ -12,13 +12,16 @@
     import StatusListItem from "./StatusListItem";
     export default {
         components: { StatusListItem },
+        props: {
+            url: String
+        },
         data() {
             return {
                 statuses: []
             }
         },
         mounted() {
-            axios.get('/statuses')
+            axios.get(this.getUrl)
                 .then(res => {
                     this.statuses = res.data.data
                 })
@@ -30,6 +33,11 @@
                 this.statuses.unshift(status);
             })
         },
+        computed: {
+            getUrl() {
+                return this.url ? this.url : '/statuses';
+            }
+        }
     }
 </script>
 
