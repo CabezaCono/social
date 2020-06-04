@@ -50750,7 +50750,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -50769,30 +50769,48 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
         recipient: {
             type: Object,
             required: true
+        },
+        friendshipStatus: {
+            type: String,
+            required: true
         }
     },
     data: function data() {
         return {
-            TextBtn: 'Solicitar amistad'
+            localFriendshipStatus: this.friendshipStatus
         };
     },
 
     methods: {
-        sendFriendshipRequest: function sendFriendshipRequest() {
+        toggleFriendshipStatus: function toggleFriendshipStatus() {
             var _this = this;
 
-            axios.post('friendships/' + this.recipient.name).then(function (res) {
-                _this.TextBtn = 'Solicitud enviada';
+            var method = this.getMethod();
+            axios[method]('friendships/' + this.recipient.name).then(function (res) {
+                _this.localFriendshipStatus = res.data.friendship_status;
             }).catch(function (err) {
                 console.log(err.response.data);
             });
+        },
+        getMethod: function getMethod() {
+            if (this.localFriendshipStatus === 'pending') {
+                return 'delete';
+            }
+            return 'post';
+        }
+    },
+    computed: {
+        getText: function getText() {
+            if (this.localFriendshipStatus === 'pending') {
+                return 'Cancelar solicitud';
+            }
+            return 'Solicitar amistad';
         }
     }
 });
@@ -50805,14 +50823,9 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "button",
-    {
-      attrs: { dusk: "request-friendship" },
-      on: { click: _vm.sendFriendshipRequest }
-    },
-    [_vm._v("\n    " + _vm._s(_vm.TextBtn) + "\n")]
-  )
+  return _c("button", { on: { click: _vm.toggleFriendshipStatus } }, [
+    _vm._v("\n    " + _vm._s(_vm.getText) + "\n")
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
