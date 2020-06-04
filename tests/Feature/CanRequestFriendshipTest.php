@@ -13,6 +13,50 @@ class CanRequestFriendshipTest extends TestCase
 
     /** @test */
 
+    function guest_users_cannot_create_friendship_request()
+    {
+        $recipient = factory(User::class)->create();
+
+        $response = $this->postJson(route('friendships.store', $recipient));
+
+        $response->assertStatus(401);
+    }
+
+    /** @test */
+
+    function guest_users_cannot_delete_friendship_request()
+    {
+        $recipient = factory(User::class)->create();
+
+        $response = $this->deleteJson(route('friendships.destroy', $recipient));
+
+        $response->assertStatus(401);
+    }
+
+    /** @test */
+
+    function guest_users_cannot_accept_friendship_request()
+    {
+        $user = factory(User::class)->create();
+
+        $response = $this->postJson(route('accept-friendships.store', $user));
+
+        $response->assertStatus(401);
+    }
+
+    /** @test */
+
+    function guest_users_cannot_deny_friendship_request()
+    {
+        $user = factory(User::class)->create();
+
+        $response = $this->deleteJson(route('accept-friendships.destroy', $user));
+
+        $response->assertStatus(401);
+    }
+
+    /** @test */
+
     function can_create_friendship_request()
     {
         $this->withoutExceptionHandling();
