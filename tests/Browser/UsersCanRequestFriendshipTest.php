@@ -2,6 +2,7 @@
 
 namespace Tests\Browser;
 
+use App\Models\Friendship;
 use App\User;
 use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
@@ -33,6 +34,33 @@ class UsersCanRequestFriendshipTest extends DuskTestCase
                 ->waitForText('Solicitar amistad')
                 ->assertSee('Solicitar amistad')
 
+            ;
+        });
+    }
+
+    /**
+     * @test
+     * @throws \Throwable
+     */
+    public function recipient_can_accept_and_deny_friendship_request()
+    {
+        $sender = factory(User::class)->create();
+        $recipient = factory(User::class)->create();
+
+        Friendship::create([
+            'sender_id' => $sender->id,
+            'recipient_id' => $recipient->id
+        ]);
+
+        $this->browse(function (Browser $browser) use ($sender, $recipient) {
+            $browser->loginAs($recipient)
+                ->visit(route('accept-friendships.index'))
+                ->assertSee($sender->name)
+                ->press('@accept-friendship')
+                ->waitForText('Son amigos')
+                ->assertSee('Son amigos')
+                ->visit(route('accept-friendships.index'))
+                ->waitForText('Son amigos')
             ;
         });
     }
