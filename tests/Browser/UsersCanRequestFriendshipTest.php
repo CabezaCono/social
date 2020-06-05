@@ -26,15 +26,12 @@ class UsersCanRequestFriendshipTest extends DuskTestCase
                 ->press('@request-friendship')
                 ->waitForText('Cancelar solicitud')
                 ->assertSee('Cancelar solicitud')
-
                 ->visit(route('users.show', $recipient))
                 ->waitForText('Cancelar solicitud')
                 ->assertSee('Cancelar solicitud')
                 ->press('@request-friendship')
                 ->waitForText('Solicitar amistad')
-                ->assertSee('Solicitar amistad')
-
-            ;
+                ->assertSee('Solicitar amistad');
         });
     }
 
@@ -42,7 +39,7 @@ class UsersCanRequestFriendshipTest extends DuskTestCase
      * @test
      * @throws \Throwable
      */
-    public function recipient_can_accept_and_deny_friendship_request()
+    public function recipient_can_accept_friendship_request()
     {
         $sender = factory(User::class)->create();
         $recipient = factory(User::class)->create();
@@ -60,8 +57,33 @@ class UsersCanRequestFriendshipTest extends DuskTestCase
                 ->waitForText('Son amigos')
                 ->assertSee('Son amigos')
                 ->visit(route('accept-friendships.index'))
-                ->waitForText('Son amigos')
-            ;
+                ->waitForText('Son amigos');
+        });
+    }
+
+    /**
+     * @test
+     * @throws \Throwable
+     */
+    public function recipient_can_deny_friendship_request()
+    {
+        $sender = factory(User::class)->create();
+        $recipient = factory(User::class)->create();
+
+        Friendship::create([
+            'sender_id' => $sender->id,
+            'recipient_id' => $recipient->id
+        ]);
+
+        $this->browse(function (Browser $browser) use ($sender, $recipient) {
+            $browser->loginAs($recipient)
+                ->visit(route('accept-friendships.index'))
+                ->assertSee($sender->name)
+                ->press('@deny-friendship')
+                ->waitForText('Solicitud denegada')
+                ->assertSee('Solicitud denegada')
+                ->visit(route('accept-friendships.index'))
+                ->waitForText('Solicitud denegada');
         });
     }
 }
