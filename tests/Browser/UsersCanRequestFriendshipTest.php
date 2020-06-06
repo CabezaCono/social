@@ -39,6 +39,58 @@ class UsersCanRequestFriendshipTest extends DuskTestCase
      * @test
      * @throws \Throwable
      */
+    public function sender_can_delete_accepted_friendship_request()
+    {
+        $sender = factory(User::class)->create();
+        $recipient = factory(User::class)->create();
+        Friendship::create([
+            'sender_id' => $sender->id,
+            'recipient_id' => $recipient->id,
+            'status' => 'accepted'
+        ]);
+        $this->browse(function (Browser $browser) use ($sender, $recipient) {
+            $browser->loginAs($sender)
+                ->visit(route('users.show', $recipient))
+                ->assertSee('Eliminar de mis amigos')
+                ->press('@request-friendship')
+                ->waitForText('Solicitar amistad')
+                ->assertSee('Solicitar amistad')
+                ->visit(route('users.show', $recipient))
+                ->assertSee('Solicitar amistad')
+                ;
+        });
+    }
+
+    /**
+     * @test
+     * @throws \Throwable
+     */
+    public function sender_cannot_delete_denied_friendship_request()
+    {
+        $sender = factory(User::class)->create();
+        $recipient = factory(User::class)->create();
+        Friendship::create([
+            'sender_id' => $sender->id,
+            'recipient_id' => $recipient->id,
+            'status' => 'denied'
+        ]);
+        $this->browse(function (Browser $browser) use ($sender, $recipient) {
+            $browser->loginAs($sender)
+                ->visit(route('users.show', $recipient))
+                ->assertSee('Solicitud denegada')
+                ->press('@request-friendship')
+                ->waitForText('Solicitud denegada')
+                ->assertSee('Solicitud denegada')
+                ->visit(route('users.show', $recipient))
+                ->waitForText('Solicitud denegada')
+                ;
+        });
+    }
+
+    /**
+     * @test
+     * @throws \Throwable
+     */
     public function recipient_can_accept_friendship_request()
     {
         $sender = factory(User::class)->create();
