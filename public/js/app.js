@@ -55994,7 +55994,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n.status-list-transition-move[data-v-0bf1005b] {\n    -webkit-transition: all .9s;\n    transition: all .9s;\n}\n", ""]);
 
 // exports
 
@@ -56007,6 +56007,8 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__StatusListItem__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__StatusListItem___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__StatusListItem__);
+//
+//
 //
 //
 //
@@ -56673,12 +56675,19 @@ var render = function() {
   return _c(
     "div",
     { on: { click: _vm.redirectIfGuest } },
-    _vm._l(_vm.statuses, function(status) {
-      return _c("status-list-item", {
-        key: status.id,
-        attrs: { status: status }
-      })
-    }),
+    [
+      _c(
+        "transition-group",
+        { attrs: { name: "status-list-transition" } },
+        _vm._l(_vm.statuses, function(status) {
+          return _c("status-list-item", {
+            key: status.id,
+            attrs: { status: status }
+          })
+        }),
+        1
+      )
+    ],
     1
   )
 }
