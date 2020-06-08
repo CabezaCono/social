@@ -2,10 +2,16 @@
 
 namespace Tests\Feature;
 
-use App\Models\Status;
 use App\User;
 use Tests\TestCase;
+use App\Models\Status;
+use App\Models\Comment;
+use App\Events\CommentCreated;
+use Illuminate\Support\Facades\Event;
+use App\Http\Resources\CommentResource;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class CreateCommentsTest extends TestCase
 {
@@ -43,6 +49,35 @@ class CreateCommentsTest extends TestCase
             'status_id' => $status->id,
             'body' => $comment['body']
         ]);
+    }
+
+    /** @test */
+
+    function an_event_is_fired_when_a_comment_is_created()
+    {
+        Event::fake([CommentCreated::class]);
+        Broadcast::shouldReceive('socket')->andReturn('socket_id');
+
+        $status = factory(Status::class)->create();
+        $user = factory(User::class)->create();
+        $comment = ['body' => 'Mi primer comentario'];
+
+        $this->actingAs($user)
+            ->postJson(route('statuses.comments.store', $status), $comment);
+
+
+        Event::assertDispatched(CommentCreated::class, function ($CommentCreatedEvent) {
+            $this->assertInstanceOf(ShouldBroadcast::class, $CommentCreatedEvent);
+            $this->assertInstanceOf(CommentResource::class, $CommentCreatedEvent->comment);
+            $this->assertInstanceOf(Comment::class, $CommentCreatedEvent->comment->resource);
+            $this->assertInstanceOf(Comment::class, $CommentCreatedEvent->comment->resource);
+            $this->assertEquals(Comment::first()->id, $CommentCreatedEvent->comment->id);
+            $this->assertEquals(
+                'socket_id',
+                $CommentCreatedEvent->socket,
+                'The event' . get_class($CommentCreatedEvent) . ' must call the method "dontBroadcastToCurrentUser" in the constructor.');
+            return true;
+        });
     }
 
     /** @test */
