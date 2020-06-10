@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Event;
 use App\Http\Resources\CommentResource;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class CreateCommentsTest extends TestCase
 {
@@ -65,17 +64,14 @@ class CreateCommentsTest extends TestCase
         $this->actingAs($user)
             ->postJson(route('statuses.comments.store', $status), $comment);
 
+        Event::assertDispatched(CommentCreated::class, function ($commentStatusEvent) {
+            $this->assertInstanceOf(CommentResource::class, $commentStatusEvent->comment);
+            $this->assertTrue(Comment::first()->is($commentStatusEvent->comment->resource));
+            $this->assertEventChannelType('public', $commentStatusEvent);
+            $this->assertEventChannelName("statuses.{$commentStatusEvent->comment->status_id}.comments", $commentStatusEvent);
+            $this->assertDontBroadcastToCurrentUser($commentStatusEvent);
 
-        Event::assertDispatched(CommentCreated::class, function ($CommentCreatedEvent) {
-            $this->assertInstanceOf(ShouldBroadcast::class, $CommentCreatedEvent);
-            $this->assertInstanceOf(CommentResource::class, $CommentCreatedEvent->comment);
-            $this->assertInstanceOf(Comment::class, $CommentCreatedEvent->comment->resource);
-            $this->assertInstanceOf(Comment::class, $CommentCreatedEvent->comment->resource);
-            $this->assertEquals(Comment::first()->id, $CommentCreatedEvent->comment->id);
-            $this->assertEquals(
-                'socket_id',
-                $CommentCreatedEvent->socket,
-                'The event' . get_class($CommentCreatedEvent) . ' must call the method "dontBroadcastToCurrentUser" in the constructor.');
+
             return true;
         });
     }
