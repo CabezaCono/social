@@ -58,4 +58,28 @@ class UsersCanLikeStatusesTest extends DuskTestCase
             ;
         });
     }
+
+    /**
+     * A Dusk test example.
+     *
+     * @test
+     * @throws \Throwable
+     */
+    public function users_can_see_likes_in_real_time()
+    {
+        $user = factory(User::class)->create();
+        $status = factory(Status::class)->create();
+        $this->browse(function (Browser $browser1, Browser $browser2) use ($user, $status){
+            $browser1->visit('/');
+            $browser2->loginAs($user)
+                ->visit('/')
+                ->waitForText($status->body)
+                ->assertSeeIn('@likes-count', 0)
+                ->press('@like-btn')
+                ->waitForText('TE GUSTA')
+            ;
+
+            $browser1->assertSeeIn('@likes-count', 1);
+        });
+    }
 }
