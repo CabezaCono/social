@@ -8,7 +8,7 @@
            role="button" data-toggle="dropdown"
            aria-haspopup="true"
            aria-expanded="false">
-            <slot></slot> {{ count }}
+            <slot></slot> <span dusk="notifications-count">{{ count }}</span>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownNotifications">
             <div class="dropdown-header text-center">Notificaciones</div>
