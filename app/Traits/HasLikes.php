@@ -5,6 +5,7 @@ namespace App\Traits;
 use App\Events\ModelLiked;
 use App\Events\ModelUnliked;
 use App\Models\Like;
+use Illuminate\Support\Str;
 
 trait HasLikes
 {
@@ -43,6 +44,8 @@ trait HasLikes
 
     public function eventChannelName()
     {
-        return strtolower(str_plural(class_basename($this))) . '.' . $this->getKey() . '.likes';
+        return strtolower(Str::plural(class_basename($this))) . '.' . $this->getKey() . '.likes';
     }
+
+    abstract function path();
 }

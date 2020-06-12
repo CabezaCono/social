@@ -176,4 +176,9 @@ class ModelWithLike extends Model
     public $timestamps = false;
 
     protected $fillable = ['id'];
+
+    function path()
+    {
+        // TODO: Implement path() method.
+    }
 }
