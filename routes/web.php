@@ -44,4 +44,7 @@ Route::get('friends/request', 'AcceptFriendshipsController@index')->name('accept
 Route::post('accept-friendships/{sender}', 'AcceptFriendshipsController@store')->name('accept-friendships.store')->middleware('auth');
 Route::delete('accept-friendships/{sender}', 'AcceptFriendshipsController@destroy')->name('accept-friendships.destroy')->middleware('auth');
 
+// Notification Routes
+Route::get('notifications', 'NotificationsController@index')->name('notifications.index')->middleware('auth');
+
 Route::auth();
