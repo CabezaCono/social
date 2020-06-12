@@ -26,6 +26,7 @@ class CanLikeCommentsTest extends TestCase
 
     function an_authenticated_user_can_like_and_unlike_statuses()
     {
+        \Notification::fake();
 
         $this->withoutExceptionHandling();
 

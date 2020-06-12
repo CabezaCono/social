@@ -29,4 +29,9 @@ class StatusesController extends Controller
 
         return $statusResource;
     }
+
+    public function show(Status $status)
+    {
+        return view('statuses.show', ['status' => StatusResource::make($status)]);
+    }
 }
