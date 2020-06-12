@@ -19,6 +19,6 @@ class Comment extends Model
 
     public function path()
     {
-        // TODO: Implement path() method.
+        return route('statuses.show', $this->status_id) . '#comment-' . $this->id;
     }
 }
