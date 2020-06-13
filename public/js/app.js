@@ -2225,12 +2225,7 @@ __webpack_require__.r(__webpack_exports__);
       var method = this.model.is_liked ? 'delete' : 'post';
       axios[method](this.url).then(function (res) {
         _this.model.is_liked = !_this.model.is_liked;
-
-        if (method === 'post') {
-          _this.model.likes_count++;
-        } else {
-          _this.model.likes_count--;
-        }
+        _this.model.likes_count = res.data.likes_count;
       });
     }
   },

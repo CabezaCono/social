@@ -27,11 +27,7 @@
                 axios[method](this.url)
                     .then(res => {
                         this.model.is_liked = ! this.model.is_liked;
-                        if (method === 'post') {
-                            this.model.likes_count ++;
-                        } else {
-                            this.model.likes_count --;
-                        }
+                        this.model.likes_count = res.data.likes_count;
                     })
             },
         },
