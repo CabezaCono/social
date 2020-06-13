@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Models;
 
+use App\Models\Status;
 use App\Traits\HasLikes;
 use App\User;
 use Tests\TestCase;
@@ -18,6 +19,14 @@ class CommentTest extends TestCase
         $comment = factory(Comment::class)->create();
 
         $this->assertInstanceOf(User::class, $comment->user);
+    }
+
+    /** @test */
+    function a_comment_belongs_to_status()
+    {
+        $comment = factory(Comment::class)->create();
+
+        $this->assertInstanceOf(Status::class, $comment->status);
     }
 
     /** @test */
