@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Listeners;
 
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Notification;
 use Tests\TestCase;
 use App\Models\Status;
@@ -28,9 +29,11 @@ class SendNewCommentNotificationTest extends TestCase
         Notification::assertSentTo(
             $status->user,
             NewCommentNotification::class,
-            function ($notification, $channel) use ($comment) {
+            function ($notification, $channel) use ($comment, $status) {
                 $this->assertContains('database', $channel);
+                $this->assertContains('broadcast', $channel);
                 $this->assertTrue($notification->comment->is($comment));
+                $this->assertInstanceOf(BroadcastMessage::class, $notification->toBroadcast($status->user));
                 return true;
             }
         );

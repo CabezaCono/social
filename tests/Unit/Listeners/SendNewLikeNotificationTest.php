@@ -3,6 +3,7 @@
 namespace Tests\Unit\Listeners;
 
 use App\User;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Tests\TestCase;
 use App\Models\Status;
 use App\Events\ModelLiked;
@@ -37,6 +38,7 @@ class SendNewLikeNotificationTest extends TestCase
                     $this->assertContains('broadcast', $channel);
                     $this->assertTrue($notification->model->is($status));
                     $this->assertTrue($notification->likeSender->is($likeSender));
+                    $this->assertInstanceOf(BroadcastMessage::class, $notification->toBroadcast($status->user));
                     return true;
                 });
     }

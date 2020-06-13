@@ -56,7 +56,7 @@ class UsersCanGetTheirNotificationsTest extends DuskTestCase
      * @test
      * @throws \Throwable
      */
-    public function users_can_see_their_notifications_in_real_time()
+    public function users_can_see_their_like_notifications_in_real_time()
     {
         $user1 = factory(User::class)->create();
         $user2 = factory(User::class)->create();
@@ -73,6 +73,35 @@ class UsersCanGetTheirNotificationsTest extends DuskTestCase
                 ->visit('/')
                 ->pause(1000)
                 ->press('@like-btn')
+                ->pause(2000)
+            ;
+
+            $browser1->assertSeeIn('@notifications-count', 1);
+        });
+    }
+
+    /**
+     * @test
+     * @throws \Throwable
+     */
+    public function users_can_see_their_comment_notifications_in_real_time()
+    {
+        $user1 = factory(User::class)->create();
+        $user2 = factory(User::class)->create();
+
+        $status = factory(Status::class)->create(['user_id' => $user1->id]);
+
+        $this->browse(function (Browser $browser1, Browser $browser2) use ($user1, $user2, $status) {
+            $browser1->loginAs($user1)
+                ->visit('/')
+                ->resize(1024, 768)
+                ;
+
+            $browser2->loginAs($user2)
+                ->visit('/')
+                ->pause(1000)
+                ->type('comment', 'Mi comentario')
+                ->press('@comment-btn')
                 ->pause(2000)
             ;
 
