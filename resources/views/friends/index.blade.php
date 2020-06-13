@@ -2,10 +2,15 @@
 
 @section('content')
     <div class="container">
-        @forelse($friends as $friend)
-        <p>{{ $friend->name }}</p>
-        @empty
-            No tienes amigos
-        @endforelse
+        <div class="row">
+            @forelse($friends as $friend)
+                <div class="col-md-3">
+                    @include('partials.user', ['user' => $friend])
+                </div>
+            @empty
+                No tienes amigos
+            @endforelse
+        </div>
     </div>
 @endsection
+
