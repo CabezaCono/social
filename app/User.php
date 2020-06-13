@@ -83,4 +83,17 @@ class User extends Authenticatable
 
         return $friendship;
     }
+
+    public function friends()
+    {
+        $senderFriends =  $this->belongsToMany(User::class, 'friendships', 'sender_id', 'recipient_id')
+            ->wherePivot('status', 'accepted')
+            ->get();
+
+        $recipientFriends =  $this->belongsToMany(User::class, 'friendships', 'recipient_id','sender_id' )
+            ->wherePivot('status', 'accepted')
+            ->get();
+
+        return $senderFriends->merge($recipientFriends);
+    }
 }
