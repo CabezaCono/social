@@ -50,4 +50,31 @@ class UserTest extends TestCase
 
         $this->assertInstanceOf(Status::class, $user->statuses->first());
     }
+
+    /** @test */
+
+    function a_user_can_send_friend_request()
+    {
+        $sender = factory(User::class)->create();
+        $recipient = factory(User::class)->create();
+
+        $friendship = $sender->sendFriendRequestTo($recipient);
+
+        $this->assertTrue($friendship->sender->is($sender));
+        $this->assertTrue($friendship->recipient->is($recipient));
+    }
+
+    /** @test */
+
+    function a_user_can_accept_friend_request()
+    {
+        $sender = factory(User::class)->create();
+        $recipient = factory(User::class)->create();
+
+        $sender->sendFriendRequestTo($recipient);
+
+        $friendship = $recipient->acceptFriendRequestFrom($sender);
+
+        $this->assertEquals('accepted', $friendship->status);
+    }
 }
